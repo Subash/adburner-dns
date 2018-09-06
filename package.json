@@ -1,0 +1,32 @@
+{
+  "name": "adburner-dns",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "body-parser": "^1.18.3",
+    "dns-packet": "^5.0.0",
+    "download": "^7.1.0",
+    "express": "^4.16.3",
+    "forever": "^0.15.3",
+    "fs-extra": "^7.0.0",
+    "ip": "^1.1.5",
+    "micromatch": "^3.1.10"
+  },
+  "scripts": {
+    "start": "forever lib/index.js",
+    "start-dev": "npm run clean-lib && npm run compile-src && sudo node lib/index.js",
+    "compile-src": "babel src --out-dir lib",
+    "clean-lib": "rm -r ./lib || true"
+  },
+  "babel": {
+    "plugins": [
+      "transform-es2015-modules-commonjs",
+      "babel-plugin-syntax-object-rest-spread",
+      "babel-plugin-transform-object-rest-spread"
+    ]
+  }
+}
