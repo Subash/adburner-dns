@@ -1,5 +1,5 @@
 import dgram from 'dgram';
-const REMOTE_QUERY_TIMEOUT = 10 * 1000; // 10 Seconds
+import config from './config';
 
 export default function queryDoh({ serverAddress, requestPacket }) {
   return new Promise((resolve, reject)=> {
@@ -7,7 +7,7 @@ export default function queryDoh({ serverAddress, requestPacket }) {
     
     const queryTimeout = setTimeout(()=> {
       handleError(new Error('Connection timed out'));
-    }, REMOTE_QUERY_TIMEOUT);
+    }, config.remoteQueryTimeout);
 
     const cleanup = ()=> {
       socket.removeListener('message', handleMessage);
