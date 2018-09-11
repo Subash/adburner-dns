@@ -4,18 +4,13 @@ import queryHttp from './query-http';
 import queryUdp from './query-udp';
 import config from './config';
 import * as blocker from './blocker';
-import * as stats from './stats';
 const server = dgram.createSocket('udp4');
+const queryRemote = config.dnsOverHttps? queryHttp : queryUdp;
+const remoteAddress = config.dnsOverHttps? config.httpsRemoteAddress: config.udpRemoteAddress;
 
 async function resolveQuery(requestPacket) {
-  stats.incrementDnsQueryCount();
-  const queryRemote = config.useDoh ? queryHttp : queryUdp;
-  
   const decodedRequestPacket = packet.decode(requestPacket);
-  const remoteQueryOptions = { serverAddress: config.remoteAddress, requestPacket };
-
-  //Proxy the query if the blocker is paused
-  if(config.pauseBlocker) return await queryRemote(remoteQueryOptions);
+  const remoteQueryOptions = { serverAddress: remoteAddress, requestPacket };
   
   //questions is an array but it's almost guaranteed to have only one element
   //https://serverfault.com/q/742785
@@ -26,8 +21,6 @@ async function resolveQuery(requestPacket) {
 
   //Proxy the query if requested domain is not blocked
   if(!blocker.isBlocked(question.name)) return await queryRemote(remoteQueryOptions);
-
-  stats.incrementDnsBlockCount();  
 
   //Respond with NXDOMAIN
   return packet.encode({
@@ -44,7 +37,6 @@ async function handleQuery(message, rinfo) {
     response = await resolveQuery(message);
   } catch (err) {
     console.error(err);
-    stats.incrementDnsErrorCount();
   }
 
   if(!response) {
