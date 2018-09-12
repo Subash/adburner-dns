@@ -23,20 +23,16 @@ async function exists(filePath) {
   }
 }
 
-async function readBlockedHosts() {
-  let data = (await fs.readFile(config.blockedHosts, 'utf-8'));
+async function loadBlockedHosts() {
+  const isCached = await exists(config.blockedHosts);
+  if(!isCached) await downloadBlockedHosts();
+  let data = await fs.readFile(config.blockedHosts, 'utf-8');
   blockedHosts = data.split('\n')
     .map( line => line.trim())
     .filter( line => !line.startsWith('#')) //Remove comments
     .filter( line => line.startsWith('0.0.0.0')) //Pick the blocked hosts
     .map( line => line.split(' ')[1]) //Keep just the hostname
     .map( line => line.trim());
-}
-
-async function loadBlockedHosts() {
-  const isCached = await exists(config.blockedHosts);
-  if(!isCached) await downloadBlockedHosts();
-  await readBlockedHosts();
 }
 
 async function loadBlackList() {
