@@ -7,20 +7,26 @@ import config from './config';
 import * as blocker from './blocker';
 const server = dgram.createSocket('udp4');
 
-async function resolveQuery({ requestPacket, serverAddress }) {
+async function queryRemote(requestPacket) {
+  const query = config.dnsOverHttps? queryHttp : queryUdp;
+  const remoteAddresses = config.dnsOverHttps? config.httpsRemoteAddresses: config.udpRemoteAddresses;
+  return await Promise.any( remoteAddresses.map( remoteAddress => {
+    return query({ serverAddress: remoteAddress, requestPacket});
+  }));
+}
+
+async function resolveQuery(requestPacket) {
   const decodedRequestPacket = packet.decode(requestPacket);
-  const remoteQueryOptions = { serverAddress, requestPacket };
-  const queryRemote = config.dnsOverHttps? queryHttp : queryUdp;
-  
+
   //questions is an array but it's almost guaranteed to have only one element
   //https://serverfault.com/q/742785
   const question = decodedRequestPacket.questions[0];
 
   //Proxy the query if the query is not for A or AAAA record
-  if(!['A', 'AAAA'].includes(question.type)) return await queryRemote(remoteQueryOptions);
+  if(!['A', 'AAAA'].includes(question.type)) return await queryRemote(requestPacket);
 
   //Proxy the query if requested domain is not blocked
-  if(!blocker.isBlocked(question.name)) return await queryRemote(remoteQueryOptions);
+  if(!blocker.isBlocked(question.name)) return await queryRemote(requestPacket);
 
   console.log(`Blocked ${question.name}`);
 
@@ -34,16 +40,13 @@ async function resolveQuery({ requestPacket, serverAddress }) {
 }
 
 async function handleQuery(message, rinfo) {
-  const remoteAddresses = config.dnsOverHttps? config.httpsRemoteAddresses: config.udpRemoteAddresses;
   let response, request = packet.decode(message);
   //questions is an array but it's almost guaranteed to have only one element
   //https://serverfault.com/q/742785
   const question = request.questions[0];
 
   try {
-    response = await Promise.any( remoteAddresses.map( serverAddress => {
-      return resolveQuery({ requestPacket: message, serverAddress });
-    }));
+    response = await resolveQuery(message);
   } catch (err) {
     console.log(`Failed to resolve ${question.name}`);
     if(err.name === 'AggregateError') {
