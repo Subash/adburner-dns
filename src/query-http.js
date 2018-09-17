@@ -1,5 +1,6 @@
 import url from 'url';
 import https from 'https';
+import config from './config';
 
 export default function queryHttp({ serverAddress, requestPacket }) {
   return new Promise((resolve, reject)=> {
@@ -14,6 +15,10 @@ export default function queryHttp({ serverAddress, requestPacket }) {
         'Content-Length': requestPacket.length
       }
     };
+    
+    setTimeout(()=> {
+      reject(new Error(`Connection to ${serverAddress} timed out`));
+    }, config.remoteQueryTimeout);
     
     const req = https.request(options, (res) => {
       let data = new Buffer(0);
