@@ -6,7 +6,7 @@ export default function queryDoh({ serverAddress, requestPacket }) {
     const socket = dgram.createSocket('udp4');
     
     const queryTimeout = setTimeout(()=> {
-      handleError(new Error('Connection timed out'));
+      handleError(new Error(`Connection to ${serverAddress} timed out`));
     }, config.remoteQueryTimeout);
 
     const cleanup = ()=> {
