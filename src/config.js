@@ -13,8 +13,8 @@ const config = {
   dnsOverHttps: env.DNS_OVER_HTTPS == 'true',
   httpsRemoteAddresses: env.HTTPS_REMOTE_ADDRESS.split(',').map( item=> item.trim()), //Allow comma separated list
   udpRemoteAddresses: env.UDP_REMOTE_ADDRESS.split(',').map( item=> item.trim()), //Allow comma separated list
+  blockedHostsUrl: env.BLOCKED_HOSTS_URL,  
   remoteQueryTimeout: 10 * 1000, // 10 Seconds
-  blockedHostsUrl: process.env.BLOCKED_HOSTS_URL || 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts',
   blockedHosts: path.resolve(__dirname, '../data/hosts.txt'),
   blackList: path.resolve(__dirname, '../data/blacklist.txt'),
   whiteList: path.resolve(__dirname, '../data/whitelist.txt')

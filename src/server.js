@@ -16,11 +16,11 @@ async function queryRemote(requestPacket) {
 }
 
 async function resolveQuery(requestPacket) {
-  const decodedRequestPacket = packet.decode(requestPacket);
+  const request = packet.decode(requestPacket);
 
   //questions is an array but it's almost guaranteed to have only one element
   //https://serverfault.com/q/742785
-  const question = decodedRequestPacket.questions[0];
+  const question = request.questions[0];
 
   //Proxy the query if the query is not for A or AAAA record
   if(!['A', 'AAAA'].includes(question.type)) return await queryRemote(requestPacket);
@@ -33,20 +33,20 @@ async function resolveQuery(requestPacket) {
   //Respond with NXDOMAIN
   return packet.encode({
     type: 'response',
-    id: decodedRequestPacket.id,
+    id: request.id,
     flags: 3, //3 is NXDOMAIN; https://serverfault.com/a/827108
-    questions: decodedRequestPacket.questions,
+    questions: request.questions,
   });
 }
 
-async function handleQuery(message, rinfo) {
-  let response, request = packet.decode(message);
+async function handleQuery(requestPacket, rinfo) {
+  let response, request = packet.decode(requestPacket);
   //questions is an array but it's almost guaranteed to have only one element
   //https://serverfault.com/q/742785
   const question = request.questions[0];
 
   try {
-    response = await resolveQuery(message);
+    response = await resolveQuery(requestPacket);
   } catch (err) {
     console.log(`Failed to resolve ${question.name}`);
     if(err.name === 'AggregateError') {
