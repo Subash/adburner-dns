@@ -1,5 +1,6 @@
 import dgram from 'dgram';
 import packet from 'dns-packet';
+import Promise from 'bluebird';
 import queryHttp from './query-http';
 import queryUdp from './query-udp';
 import config from './config';
@@ -39,12 +40,16 @@ async function handleQuery(message, rinfo) {
   //https://serverfault.com/q/742785
   const question = request.questions[0];
 
-  for(const remoteAddress of remoteAddresses) {
-    try {
-      response = await resolveQuery({ requestPacket: message, serverAddress: remoteAddress });
-      break;
-    } catch (err) {
-      console.log(`Failed to resolve ${question.name} with ${remoteAddress}, Error: ${err.message}`)
+  try {
+    response = await Promise.any( remoteAddresses.map( serverAddress => {
+      return resolveQuery({ requestPacket: message, serverAddress });
+    }));
+  } catch (err) {
+    console.log(`Failed to resolve ${question.name}`);
+    if(err.name === 'AggregateError') {
+      err.forEach( e => console.log(e.message));
+    } else {
+      console.log(err.message);
     }
   }
 
