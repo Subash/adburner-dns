@@ -33,25 +33,18 @@ async function resolveQuery({ requestPacket, serverAddress }) {
 }
 
 async function handleQuery(message, rinfo) {
+  const remoteAddresses = config.dnsOverHttps? config.httpsRemoteAddresses: config.udpRemoteAddresses;
   let response, request = packet.decode(message);
-  
   //questions is an array but it's almost guaranteed to have only one element
   //https://serverfault.com/q/742785
   const question = request.questions[0];
-  
-  try {
-    const remoteAddress = config.dnsOverHttps? config.httpsRemoteAddress: config.udpRemoteAddress;
-    response = await resolveQuery({ requestPacket: message, serverAddress: remoteAddress });
-  } catch (err) {
-    console.log(`Failed to resolve ${question.name} with ${remoteAddress}, Error: ${err.message}`)
-  }
 
-  if(!response && config.useFallbackAddress) {
+  for(const remoteAddress of remoteAddresses) {
     try {
-      const remoteAddressFallback = config.dnsOverHttps ? config.httpsRemoteAddressFallback: config.udpRemoteAddressFallback;
-      response = await resolveQuery({ requestPacket: message, serverAddress: remoteAddressFallback });
+      response = await resolveQuery({ requestPacket: message, serverAddress: remoteAddress });
+      break;
     } catch (err) {
-      console.log(`Failed to resolve ${question.name} with ${remoteAddressFallback}, Error: ${err.message}`)
+      console.log(`Failed to resolve ${question.name} with ${remoteAddress}, Error: ${err.message}`)
     }
   }
 
