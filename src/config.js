@@ -1,4 +1,5 @@
 import path from 'path';
+import dotenv from 'dotenv';
 
 const defaultEnv = {
   DNS_OVER_HTTPS: `true`, //process.env items are strings
@@ -7,7 +8,8 @@ const defaultEnv = {
   BLOCKED_HOSTS_URL: `https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts`
 };
 
-const env = Object.assign({}, defaultEnv, process.env);
+dotenv.config(); //Load the .env file if it exists
+const env = Object.assign({}, defaultEnv, process.env); //merge default env with user env
 
 const config = {
   dnsOverHttps: env.DNS_OVER_HTTPS == 'true',

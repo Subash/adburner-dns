@@ -9,6 +9,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bluebird": "^3.5.2",
     "dns-packet": "^5.0.0",
+    "dotenv": "^6.0.0",
     "download": "^7.1.0",
     "forever": "^0.15.3",
     "fs-extra": "^7.0.0",
