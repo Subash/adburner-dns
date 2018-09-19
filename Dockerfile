@@ -11,7 +11,7 @@ COPY package-lock.json /usr/src/app/
 RUN npm install
 
 COPY src /usr/src/app/src
-RUN npm run compile-src
+RUN npm run build
 
 EXPOSE 53/udp
 

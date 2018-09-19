@@ -15,8 +15,9 @@
     "micromatch": "^3.1.10"
   },
   "scripts": {
+    "build": "npm run clean-lib && npm run compile-src",
     "start": "forever lib/index.js",
-    "start-dev": "npm run clean-lib && npm run compile-src && sudo node lib/index.js",
+    "start-dev": " npm run build && sudo node lib/index.js",
     "compile-src": "babel src --out-dir lib",
     "clean-lib": "rm -r ./lib || true"
   },
