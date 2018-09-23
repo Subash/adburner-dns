@@ -20,7 +20,10 @@
     "start": "forever lib/index.js",
     "start-dev": " npm run build && sudo node lib/index.js",
     "compile-src": "babel src --out-dir lib",
-    "clean-lib": "rm -r ./lib || true"
+    "clean-lib": "rm -r ./lib || true",
+    "docker-build": "docker build -t adburner-dns:latest .",
+    "docker-publish": "docker tag adburner-dns:latest subash/adburner-dns && docker push subash/adburner-dns",
+    "docker-build-publish": "npm run docker-build && npm run docker-publish"
   },
   "babel": {
     "plugins": [
