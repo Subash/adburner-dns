@@ -1,4 +1,4 @@
-# adburner dns
+# adburner
 DNS based ad blocker.
 
 ## Running
