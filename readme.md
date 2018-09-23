@@ -62,12 +62,12 @@ UDP_REMOTE_ADDRESS=1.1.1.1,8.8.8.8
 BLOCKED_HOSTS_URL=https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
 ```
 Notes:
-1. DNS over https is used to query upstream. adburner itself can only resolve udp queries.
-2. Please check https://github.com/StevenBlack/hosts check/change the list of blocked hosts
+1. DNS over https is only used to query upstream. adburner itself can only resolve udp queries.
+2. Check https://github.com/StevenBlack/hosts check/change the list of blocked hosts
 
 ### 2. Whitelist/Blacklist hosts
 
-Go to the data folder. Usually `data` or `adburner-data` then edit `whitelist.txt` or `blacklist.txt` files. Do not edit the `hosts.txt` file.
+Go to the data folder. Usually `data` or `adburner-data` then edit `whitelist.txt` or `blacklist.txt` files. Do not edit the `hosts.txt` file directly.
 
 eg: `whitelist.txt`
 ```txt
