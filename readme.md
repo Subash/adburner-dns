@@ -3,7 +3,10 @@ DNS based ad blocker.
 
 ## Running
 
-There are multiple ways to run adburner.
+adburner can be run on Raspberry Pi or any other system that can run docker or nodejs.
+
+- Set up static IP for the device running the adburner server
+- Change the DNS on the router or your device to the IP address of the device running the adburner server
 
 ### 1. By cloning this repository
 
@@ -12,7 +15,6 @@ git clone https://github.com/Subash/adburner-dns.git
 ```
 
 Set environment variables in .env file. Check below for available configurations.
-
 
 ```shell
 npm install
