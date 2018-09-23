@@ -36,13 +36,13 @@ async function loadBlockedHosts() {
 }
 
 async function loadBlackList() {
-  if(!(await exists(config.blackList))) return;
+  if(!(await exists(config.blackList))) await fs.outputFile(config.blackList, ''); //create empty file
   let data = await fs.readFile(config.blackList, 'utf-8');
   blackList = data.split('\n').map( line => line.trim())
 }
 
 async function loadWhiteList() {
-  if(!(await exists(config.whiteList))) return;
+  if(!(await exists(config.whiteList))) await fs.outputFile(config.whiteList, ''); //create empty file
   let data = await fs.readFile(config.whiteList, 'utf-8');
   whiteList = data.split('\n').map( line => line.trim())
 }
