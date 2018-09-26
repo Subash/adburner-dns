@@ -23,8 +23,8 @@
     "clean-lib": "rm -r ./lib || true",
     "docker-build": "docker build -t adburner-dns:latest .",
     "docker-build-arm": "docker build -t adburner-dns:arm .",
-    "docker-publish": "docker tag adburner-dns:latest subash/adburner-dns && docker push subash/adburner-dns",
-    "docker-publish-arm": "docker tag adburner-dns:arm subash/adburner-dns && docker push subash/adburner-dns",
+    "docker-publish": "docker tag adburner-dns:latest subash/adburner-dns:latest && docker push subash/adburner-dns",
+    "docker-publish-arm": "docker tag adburner-dns:arm subash/adburner-dns:arm && docker push subash/adburner-dns",
     "docker-build-publish": "npm run docker-build && npm run docker-publish",
     "docker-build-publish-arm": "npm run docker-build-arm && npm run docker-publish-arm"
   },
