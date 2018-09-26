@@ -26,6 +26,7 @@ npm run start
 
 Set environment variables in .env file. Check below for available configurations.
 
+### For x86 servers
 ```shell
 docker run -d \
   --env-file .env \
@@ -34,10 +35,20 @@ docker run -d \
   subash/adburner-dns
 ```
 
+### For arm servers such as raspberry pi
+```shell
+docker run -d \
+  --env-file .env \
+  -v $PWD/adburner-data:/app/data \
+  -p 53:53/udp \
+  subash/adburner-dns:arm
+```
+
 ### 3. With `docker-compose`
 
 Set environment variables in .env file. Check below for available configurations.
 
+### For x86 servers
 ```yaml
 services:
   adburner:
@@ -50,6 +61,18 @@ services:
       - "53:53/udp"
 ```
 
+### For arm servers such as raspberry pi
+```yaml
+services:
+  adburner:
+    image: "subash/adburner-dns:arm"  
+    restart: "always"
+    env_file: ".env"
+    volumes:
+      - "./adburner-data:/app/data"
+    ports:
+      - "53:53/udp"
+```
 
 ## Configuration
 
