@@ -29,7 +29,7 @@ Set environment variables in .env file. Check below for available configurations
 ```shell
 docker run -d \
   --env-file .env \
-  -v $PWD/adburner-data:/usr/src/app/data \
+  -v $PWD/adburner-data:/app/data \
   -p 53:53/udp \
   subash/adburner-dns
 ```
@@ -45,7 +45,7 @@ services:
     restart: "always"
     env_file: ".env"
     volumes:
-      - "./adburner-data:/usr/src/app/data"
+      - "./adburner-data:/app/data"
     ports:
       - "53:53/udp"
 ```
