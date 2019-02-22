@@ -45,7 +45,7 @@ services:
       - "53:53/udp"
 ```
 
-### For arm servers such as raspberry pi
+### For arm servers such as Raspberry Pi
 ```yaml
 services:
   adburner:
