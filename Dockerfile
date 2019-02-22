@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:10
 
 RUN mkdir -p /app
 WORKDIR /app
@@ -8,13 +8,10 @@ ENV NPM_CONFIG_LOGLEVEL=warn
 
 COPY package.json /app/
 COPY package-lock.json /app/
-RUN npm install
+RUN npm install --production
 
 COPY src /app/src
-RUN npm run build
 
 EXPOSE 53/udp
-
-VOLUME [ "/app/data" ]
 
 CMD ["npm", "run", "start"]

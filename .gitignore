@@ -1,5 +1,5 @@
+
 .DS_Store
-node_modules
-lib
-.env
+/node_modules
+/coverage
 /data
