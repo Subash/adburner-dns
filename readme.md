@@ -2,6 +2,8 @@
 Simple DNS based ad blocker with DNS over HTTPS support.
 
 [![CircleCI](https://circleci.com/gh/Subash/adburner-dns.svg?style=svg)](https://circleci.com/gh/Subash/adburner-dns)
+![Dependencies](https://img.shields.io/david/subash/adburner-dns.svg)
+![GitHub](https://img.shields.io/github/license/subash/adburner-dns.svg)
 
 ## Running
 
