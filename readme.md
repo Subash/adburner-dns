@@ -1,6 +1,8 @@
 # adburner
 Simple DNS based ad blocker with DNS over HTTPS support.
 
+[![CircleCI](https://circleci.com/gh/Subash/adburner-dns.svg?style=svg)](https://circleci.com/gh/Subash/adburner-dns)
+
 ## Running
 
 adburner can be run on a Raspberry Pi or any other system that can run docker.
