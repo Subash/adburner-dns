@@ -5,12 +5,12 @@ Simple DNS based ad blocker with DNS over HTTPS support.
 
 ## Running
 
-adburner can be run on a Raspberry Pi or any other system that can run docker.
+adburner can be run on a Raspberry Pi or any other system with docker installed.
 
 - Set up static IP and DNS on the device running the adburner server
 - Change the DNS on your router to the IP address of the device running the adburner server
 
-### 1. With `docker`
+### 1. With docker
 
 Set environment variables in .env file. Check below for available configurations.
 
@@ -30,7 +30,7 @@ docker run -d \
   subash/adburner-dns:arm
 ```
 
-### 2. With `docker-compose`
+### 2. With docker-compose
 
 Set environment variables in .env file. Check below for available configurations.
 
