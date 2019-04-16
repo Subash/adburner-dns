@@ -8,6 +8,7 @@
     "fs-extra": "^7.0.1",
     "is-ip": "^2.0.0",
     "is-url": "^1.2.4",
+    "minimatch": "^3.0.4",
     "node-fetch": "^2.3.0"
   },
   "scripts": {

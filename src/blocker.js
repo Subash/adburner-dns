@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const fs = require('fs-extra');
 const path = require('path');
 const config = require('./config.js');
+const minimatch = require('minimatch');
 const { encode, decode } = require('dns-packet');
 const { queryServers } = require('./query');
 let hosts = [];
@@ -24,6 +25,11 @@ function parseHosts(data) {
     .filter( line => line.startsWith('0.0.0.0')) //Pick the blocked hosts
     .map( line => line.split(' ')[1]) //Keep just the hostname
     .map( line => line.trim());
+}
+
+function isBlocked(domain) {
+  if(hosts.includes(domain)) return true;
+  return hosts.some(host=> host.includes('*') && minimatch(domain, host));
 }
 
 module.exports.loadHosts = async function loadHosts() {
@@ -53,7 +59,7 @@ module.exports.resolveQuery = function resolveQuery(packet) {
     const question = request.questions[0];
 
     //Resolve with NXDOMAIN if the domain is blocked
-    if(['A', 'AAAA'].includes(question.type) && hosts.includes(question.name)) {
+    if(['A', 'AAAA'].includes(question.type) && isBlocked(question.name)) {
       console.log(`Blocked ${question.name}`);
       return resolve(encode({ type: 'response', id: request.id, flags: 3, questions: request.questions })); //Flag 3 is NXDOMAIN; https://serverfault.com/a/827108
     }
