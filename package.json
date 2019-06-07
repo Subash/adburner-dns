@@ -5,11 +5,11 @@
   "dependencies": {
     "dns-packet": "^5.2.1",
     "forever": "^1.0.0",
-    "fs-extra": "^7.0.1",
-    "is-ip": "^2.0.0",
+    "fs-extra": "^8.0.1",
+    "is-ip": "^3.0.0",
     "is-url": "^1.2.4",
     "minimatch": "^3.0.4",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.6.0"
   },
   "scripts": {
     "test": "jest",
@@ -22,6 +22,6 @@
     "docker-publish-arm": "docker push subash/adburner-dns:arm"
   },
   "devDependencies": {
-    "jest": "^24.7.1"
+    "jest": "^24.8.0"
   }
 }
