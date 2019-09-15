@@ -14,8 +14,8 @@
 	"scripts": {
 		"test": "jest",
 		"build": "tsc -p .",
-		"start": "forever src/server.js",
-		"start-dev": "sudo node src/server.js",
+		"start": "forever dist/server.js",
+		"start-dev": "sudo node dist/server.js",
 		"docker-build": "docker build -t subash/adburner-dns .",
 		"docker-build-arm": "docker build -t subash/adburner-dns:arm .",
 		"docker-run": "docker run -p 53:53/udp --env-file .env.example subash/adburner-dns",
