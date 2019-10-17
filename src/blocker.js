@@ -21,9 +21,9 @@ async function download(url) {
 function parseHosts(data) {
   return data.split('\n')
     .map( line => line.trim())
-    .filter( line => !line.startsWith('#')) //Remove comments
-    .filter( line => line.startsWith('0.0.0.0')) //Pick the blocked hosts
-    .map( line => line.split(' ')[1]) //Keep just the hostname
+    .filter( line => !line.startsWith('#')) // remove comments
+    .filter( line => line.startsWith('0.0.0.0')) // pick the blocked hosts
+    .map( line => line.split(' ')[1]) // keep just the hostname
     .map( line => line.trim());
 }
 
@@ -32,21 +32,17 @@ function isBlocked(domain) {
   return hosts.some(host=> host.includes('*') && minimatch(domain, host));
 }
 
+async function _loadHosts(hostsUrl) {
+  const cacheFile = path.join(config.cacheDir, md5(hostsUrl));
+  let data = await download(hostsUrl).catch(()=>{});
+  if(data) await fs.outputFile(cacheFile, data); // write the cache file if download succeeds
+  if(!data) data = await fs.readFile(cacheFile).catch(()=>{});  // fallback to cache if download fails
+  if(!data) throw new Error(`Failed to load the hosts file`); // throw an error if both download and cache fail
+  hosts = hosts.concat(parseHosts(data.toString('utf-8')));
+}
+
 module.exports.loadHosts = async function loadHosts() {
-  const cacheFile = path.join(config.cacheDir, md5(config.hostsUrl));
-  let data = await download(config.hostsUrl).catch(()=>{});
-
-  //Write the cache file
-  if(data) await fs.outputFile(cacheFile, data);
-
-  //Fallback to cache only when fresh download fails
-  if(!data) data = await fs.readFile(cacheFile, data).catch(()=>{});
-
-  //Throw error if both download and cache fails
-  if(!data) throw new Error(`Failed to load the hosts file`);
-
-  //Save parsed hosts
-  hosts = parseHosts(data.toString('utf-8'));
+  await Promise.all(config.hostsUrls.map(hostsUrl=> _loadHosts(hostsUrl)));
 }
 
 module.exports.resolveQuery = function resolveQuery(packet) {
@@ -54,22 +50,22 @@ module.exports.resolveQuery = function resolveQuery(packet) {
     const servers = config.useHttp? config.httpServers: config.udpServers;
     const request = decode(packet);
 
-    //questions is an array but it's almost guaranteed to have only one element
-    //https://serverfault.com/q/742785
+    // questions is an array but it's almost guaranteed to have only one element
+    // https://serverfault.com/q/742785
     const question = request.questions[0];
 
-    //Resolve with NXDOMAIN if the domain is blocked
+    // resolve with NXDOMAIN if the domain is blocked
     if(['A', 'AAAA'].includes(question.type) && isBlocked(question.name)) {
       console.log(`Blocked ${question.name}`);
-      return resolve(encode({ type: 'response', id: request.id, flags: 3, questions: request.questions })); //Flag 3 is NXDOMAIN; https://serverfault.com/a/827108
+      return resolve(encode({ type: 'response', id: request.id, flags: 3, questions: request.questions })); // flag 3 is NXDOMAIN; https://serverfault.com/a/827108
     }
 
-    //Query remote servers. Resolve with SERVFAIL on error
+    // query remote servers. Resolve with SERVFAIL on error
     queryServers(servers, packet, { timeout: config.timeout })
       .then(resolve)
       .catch((err)=> {
         console.log(err.message);
-        resolve(encode({ type: 'response', id: request.id, flags: 2, questions: request.questions })); //Flag 2 is SERVFAIL; https://serverfault.com/a/827108
+        resolve(encode({ type: 'response', id: request.id, flags: 2, questions: request.questions })); // flag 2 is SERVFAIL; https://serverfault.com/a/827108
       });
   });
 }

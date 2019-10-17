@@ -68,6 +68,6 @@ test('Test getHosts()', async ()=> {
 });
 
 test('Test getHosts() Error', async ()=> {
-  config.hostsUrl = 'https://www.google.com/abcd';
+  config.hostsUrls = ['https://subashpathak.com/404.html'];
   await expect(blocker.loadHosts()).rejects.toEqual(new Error(`Failed to load the hosts file`));
 });

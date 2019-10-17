@@ -54,7 +54,7 @@ exports.queryServer = async function queryServer(server, packet, { timeout = 10 
   throw new Error(`Invalid Remote Server`);
 }
 
-//Query all servers then pick whichever resolves first
+// query all servers then pick whichever resolves first
 exports.queryServers = function queryServers(servers, packet, { timeout = 10 * 1000 } = {}) {
   return new Promise((resolve, reject)=> {
     let errorCount = 0;
@@ -62,7 +62,7 @@ exports.queryServers = function queryServers(servers, packet, { timeout = 10 * 1
       exports.queryServer(server, packet, { timeout })
         .then(result=> resolve(result))
         .catch(err=> {
-          if(++errorCount === servers.length) reject(err); //Throw the last error if all servers fail
+          if(++errorCount === servers.length) reject(err); // throw the last error if all servers fail
         });
     });
   });
