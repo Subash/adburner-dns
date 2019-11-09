@@ -1,14 +1,11 @@
 # adburner
 Simple DNS based ad blocker with DNS over HTTPS support.
 
-[![CircleCI](https://circleci.com/gh/Subash/adburner-dns.svg?style=svg)](https://circleci.com/gh/Subash/adburner-dns)
 ![Dependencies](https://img.shields.io/david/subash/adburner-dns.svg)
 ![GitHub](https://img.shields.io/github/license/subash/adburner-dns.svg)
 
 ## Running
-
-adburner can be run on a Raspberry Pi or any other system with docker installed.
-
+- Install Docker
 - Set up static IP and DNS on the device running the adburner server
 - Change the DNS on your router to the IP address of the device running the adburner server
 
@@ -16,7 +13,6 @@ adburner can be run on a Raspberry Pi or any other system with docker installed.
 
 Set environment variables in .env file. Check below for available configurations.
 
-### For x86 servers
 ```shell
 docker run -d \
   --env-file .env \
@@ -24,34 +20,14 @@ docker run -d \
   subash/adburner-dns
 ```
 
-### For arm servers such as raspberry pi
-```shell
-docker run -d \
-  --env-file .env \
-  -p 53:53/udp \
-  subash/adburner-dns:arm
-```
-
 ### 2. With docker-compose
 
 Set environment variables in .env file. Check below for available configurations.
 
-### For x86 servers
 ```yaml
 services:
   adburner:
     image: "subash/adburner-dns"
-    restart: "always"
-    env_file: ".env"
-    ports:
-      - "53:53/udp"
-```
-
-### For arm servers such as Raspberry Pi
-```yaml
-services:
-  adburner:
-    image: "subash/adburner-dns:arm"
     restart: "always"
     env_file: ".env"
     ports:
