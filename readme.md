@@ -39,7 +39,7 @@ services:
 By default adburner uses both CloudFlare and Google DNS concurrently and picks whichever is faster.
 ```
 DNS_OVER_HTTPS=true
-HTTPS_REMOTE_ADDRESS=https://cloudflare-dns.com/dns-query,https://dns.google.com/experimental
+HTTPS_REMOTE_ADDRESS=https://cloudflare-dns.com/dns-query,https://dns.google/dns-query
 UDP_REMOTE_ADDRESS=1.1.1.1,8.8.8.8
 BLOCKED_HOSTS_URL=https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
 ```
