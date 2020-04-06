@@ -3,9 +3,9 @@ const split = str=> str.split(',').map( item=> item.trim())
 
 const env = Object.assign({}, {
   PORT: 53,
-  DNS_OVER_HTTPS: true,
+  DNS_OVER_HTTPS: 'true',
   UDP_REMOTE_ADDRESS: '1.1.1.1,8.8.8.8',
-  HTTPS_REMOTE_ADDRESS: 'https://cloudflare-dns.com/dns-query,https://dns.google.com/experimental',
+  HTTPS_REMOTE_ADDRESS: 'https://cloudflare-dns.com/dns-query,https://dns.google/dns-query',
   BLOCKED_HOSTS_URL: 'https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts',
 }, process.env); // merge process.env and defaults
 

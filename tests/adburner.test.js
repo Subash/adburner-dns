@@ -58,6 +58,7 @@ test('Resolve Blocked', async ()=> {
 
 test('Resolve Server Failure', async ()=> {
   config.udpServers = ['2.4.6.8'];
+  config.useHttp = false;
   config.timeout = 100;
   const result = decode(await blocker.resolveQuery(packet));
   expect(result.rcode).toBe('SERVFAIL');
