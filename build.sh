@@ -1,6 +1,6 @@
 #!/bin/bash
-TAG="latest"
-ARCH=`uname -m`
-[[ $ARCH == arm* ]] && TAG="pi"
-docker build -t "subash/adburner-dns:$TAG" .
-docker push "subash/adburner-dns:$TAG"
+tag="latest"
+arch=`uname -m`
+[[ $arch == arm* ]] && tag="pi"
+docker build -t "subash/adburner-dns:$tag" .
+docker push "subash/adburner-dns:$tag"
